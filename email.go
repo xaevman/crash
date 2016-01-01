@@ -75,3 +75,11 @@ func (this *EmailHandler) OnCrash(data interface{}) {
         fmt.Println(err)
     }
 }
+
+// NewEmailHandler returns a pointer to a new EmailHandler instance
+// with its values fully intialized.
+func NewEmailHandler() *EmailHandler {
+    return &EmailHandler {
+        ToAddrs : make([]string, 0),
+    }
+}
