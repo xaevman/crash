@@ -31,6 +31,11 @@ type EmailHandler struct {
     SrvPass  string
 }
 
+// ClearToAddrs clears the list of To addresses on the EmailHandler.
+func (this *EmailHandler) ClearToAddrs() {
+    this.ToAddrs = make([]string, 0)
+}
+
 // OnCrash is called automatically by the global crash handling routines. OnCrash 
 // creates a new JSON crash report email and sends it to the configured recipients.
 func (this *EmailHandler) OnCrash(data interface{}) {
@@ -79,7 +84,8 @@ func (this *EmailHandler) OnCrash(data interface{}) {
 // NewEmailHandler returns a pointer to a new EmailHandler instance
 // with its values fully intialized.
 func NewEmailHandler() *EmailHandler {
-    return &EmailHandler {
-        ToAddrs : make([]string, 0),
-    }
+    newObj := new(EmailHandler)
+    newObj.ClearToAddrs()
+
+    return newObj
 }
