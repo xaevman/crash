@@ -41,21 +41,35 @@ func (this *EmailHandler) ClearToAddrs() {
 func (this *EmailHandler) OnCrash(data interface{}) {
     var auth smtp.Auth
 
+    // check to make sure we're configured
+    if this.FromAddr == "" {
+        return
+    }
+
+    if len(this.ToAddrs) < 1 {
+        return
+    }
+
+    if this.SrvAddr == "" {
+        return
+    }
+
+    // determine auth type
     if this.SrvUser != "" && this.SrvPass != "" {
         auth = smtp.PlainAuth("", this.SrvUser, this.SrvPass, this.SrvAddr)
     } else {
         auth = nil
     }
 
+    // generate and encode the report
     rpt := NewCrashReport(data)
 
     j, err := rpt.Json()
     if err != nil {
         panic(err)
-        fmt.Println(err)
-        return
     }
 
+    // build the email message
     msg := []byte(fmt.Sprintf(
         "To: %s\n" + 
         "Subject: %s crash report (%s): %s\n\n" + 
@@ -67,6 +81,7 @@ func (this *EmailHandler) OnCrash(data interface{}) {
         j,
     ))
 
+    // send it off!
     err = smtp.SendMail(
         fmt.Sprintf("%s:%d", this.SrvAddr, this.SrvPort),
         auth,
@@ -77,7 +92,6 @@ func (this *EmailHandler) OnCrash(data interface{}) {
 
     if err != nil {
         panic(err)
-        fmt.Println(err)
     }
 }
 
