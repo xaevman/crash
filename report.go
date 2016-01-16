@@ -100,7 +100,7 @@ func NewCrashReport(errData interface{}) *CrashReport {
             HeapObjects   : ms.HeapObjects,
             StackInuse    : ms.StackInuse,
             NumGC         : ms.NumGC,
-            GCCPUFraction : ms.GCCPUFraction,
+//            GCCPUFraction : ms.GCCPUFraction,
             EnableGC      : ms.EnableGC,
             DebugGC       : ms.DebugGC,
         }
